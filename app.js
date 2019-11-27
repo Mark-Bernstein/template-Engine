@@ -108,6 +108,8 @@ inquirer
 
 async function buildTeam(chosenMember, team, templateMainFile) {
     console.log("inside buildTeam function");
+    console.log(chosenMember);
+    console.log(team);
     switch (chosenMember) {
         case "Engineer":
             console.log("im inside switch(chosenMember) and case is engineer");
@@ -119,16 +121,16 @@ async function buildTeam(chosenMember, team, templateMainFile) {
             console.log("HERE I AM, line 118");
             let addMember = await inquirer.prompt(moreMembersQuestion);
             chosenMember = addMember.additionalMember;
-            console.log(addMember.choice, "addMember.choice");
+            console.log(chosenMember, "addMember.additionalMember, line 122");
 
 
-            if (addMember.choice === "Engineer") {
+            if (chosenMember === "Engineer") {
                 let newMember = await inquirer.prompt(engineerQuestions);
                 chosenMember = newMember.additionalMember;
                 console.log("about to call buildTeam function for engineer");
                 buildTeam(chosenMember, team, templateMainFile);
 
-            } else if (addMember.choice === "Intern") {
+            } else if (chosenMember === "Intern") {
                 await inquirer.prompt(internQuestions);
                 console.log("about to call buildTeam function for intern");
                 buildTeam(chosenMember, team, templateMainFile);
@@ -149,11 +151,11 @@ async function buildTeam(chosenMember, team, templateMainFile) {
             chosenMember2 = addMember2.additionalMember;
             console.log(addMember2.choice, "addMember2.choice");
 
-            if (addMember2.choice === "Engineer") {
+            if (chosenMember2 === "Engineer") {
                 let newMember2 = await inquirer.prompt(engineerQuestions);
                 chosenMember2 = newMember2.additionalMember;
                 buildTeam(chosenMember2, team, templateMainFile);
-            } else if (addMember2.choice === "Intern") {
+            } else if (chosenMember2 === "Intern") {
                 let newMember2 = await inquirer.prompt(internQuestions);
                 chosenMember2 = newMember2.additionalMember;
                 buildTeam(chosenMember2, team, templateMainFile);
