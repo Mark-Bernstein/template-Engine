@@ -92,15 +92,11 @@ const moreMembersQuestion = [
 inquirer
     .prompt(initialQuestions)
     .then(function (user) {
-        console.log("finished prompt initialQuestions");
         const templateMainFile = fs.readFileSync(`./templates/main.html`, { encoding: 'utf8' });
-
-        //required manager card
         const manager = new Manager(user.name, user.id, user.email, user.officeNumber);
 
         let team = renderHTML(manager);
         buildTeam(user.member, team, templateMainFile);
-        console.log("about to get out of initialQuestions, line 102");
     }).catch(err => console.log(err));
 
 
@@ -109,35 +105,24 @@ async function buildTeam(chosenMember, team, templateMainFile) {
     try {
         switch (chosenMember) {
             case "Engineer":
-                console.log("im inside switch(chosenMember) and case is engineer");
                 const engineer = await inquirer.prompt(engineerQuestions);
                 let engineer1 = new Engineer(engineer.name, engineer.id, engineer.email, engineer.github);
                 let engineer1Card = renderHTML(engineer1);
                 team = team + engineer1Card;
-
-                console.log("HERE I AM, line 121");
                 let addMember = await inquirer.prompt(moreMembersQuestion);
                 chosenMember = addMember.additionalMember;
-                console.log(chosenMember, "addMember.additionalMember, line 121");
 
                 if (chosenMember === "Engineer") {
-                    await inquirer.prompt(engineerQuestions);
-                    console.log("about to call buildTeam function for engineer, line 125");
                     buildTeam(chosenMember, team, templateMainFile);
-
                 } else if (chosenMember === "Intern") {
-                    await inquirer.prompt(internQuestions);
-                    console.log("about to call buildTeam function for intern, line 130");
                     buildTeam(chosenMember, team, templateMainFile);
                 } else {
-                    console.log("im in the else statement!");
                     let temporaryMainFile = templateMainFile.replace('{{ team }}', team);
                     fs.writeFileSync("./output/index.html", temporaryMainFile);
                 }
                 break;
 
             case "Intern":
-                console.log("im inside switch(chosenMember) and case is intern");
                 const intern = await inquirer.prompt(internQuestions);
                 let intern1 = new Intern(intern.name, intern.id, intern.email, intern.school);
                 let intern1Card = renderHTML(intern1);
@@ -148,13 +133,10 @@ async function buildTeam(chosenMember, team, templateMainFile) {
                 console.log(chosenMember2, "chosenmember2 choice");
 
                 if (chosenMember2 === "Engineer") {
-                    await inquirer.prompt(engineerQuestions);
                     buildTeam(chosenMember2, team, templateMainFile);
                 } else if (chosenMember2 === "Intern") {
-                    await inquirer.prompt(internQuestions);
                     buildTeam(chosenMember2, team, templateMainFile);
                 } else {
-                    console.log("im in the else statement!");
                     let temporaryMainFile = templateMainFile.replace('{{ team }}', team);
                     fs.writeFileSync("./output/index.html", temporaryMainFile);
                 }
