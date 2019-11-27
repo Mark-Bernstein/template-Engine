@@ -100,73 +100,71 @@ inquirer
 
         let team = renderHTML(manager);
         buildTeam(user.member, team, templateMainFile);
-        console.log(user.member, "this is user.member, line 103");
-        console.log("about to get out of initialQuestions");
+        console.log("about to get out of initialQuestions, line 102");
     }).catch(err => console.log(err));
 
 
 
 async function buildTeam(chosenMember, team, templateMainFile) {
-    console.log("inside buildTeam function");
-    console.log(chosenMember);
-    console.log(team);
-    switch (chosenMember) {
-        case "Engineer":
-            console.log("im inside switch(chosenMember) and case is engineer");
-            const engineer = await inquirer.prompt(engineerQuestions);
-            let engineer1 = new Engineer(engineer.name, engineer.id, engineer.email, engineer.github);
-            let engineer1Card = renderHTML(engineer1);
-            team = team + engineer1Card;
+    try {
+        switch (chosenMember) {
+            case "Engineer":
+                console.log("im inside switch(chosenMember) and case is engineer");
+                const engineer = await inquirer.prompt(engineerQuestions);
+                let engineer1 = new Engineer(engineer.name, engineer.id, engineer.email, engineer.github);
+                let engineer1Card = renderHTML(engineer1);
+                team = team + engineer1Card;
 
-            console.log("HERE I AM, line 118");
-            let addMember = await inquirer.prompt(moreMembersQuestion);
-            chosenMember = addMember.additionalMember;
-            console.log(chosenMember, "addMember.additionalMember, line 122");
+                console.log("HERE I AM, line 121");
+                let addMember = await inquirer.prompt(moreMembersQuestion);
+                chosenMember = addMember.additionalMember;
+                console.log(chosenMember, "addMember.additionalMember, line 121");
 
+                if (chosenMember === "Engineer") {
+                    await inquirer.prompt(engineerQuestions);
+                    console.log("about to call buildTeam function for engineer, line 125");
+                    buildTeam(chosenMember, team, templateMainFile);
 
-            if (chosenMember === "Engineer") {
-                let newMember = await inquirer.prompt(engineerQuestions);
-                chosenMember = newMember.additionalMember;
-                console.log("about to call buildTeam function for engineer");
-                buildTeam(chosenMember, team, templateMainFile);
+                } else if (chosenMember === "Intern") {
+                    await inquirer.prompt(internQuestions);
+                    console.log("about to call buildTeam function for intern, line 130");
+                    buildTeam(chosenMember, team, templateMainFile);
+                } else {
+                    console.log("im in the else statement!");
+                    let temporaryMainFile = templateMainFile.replace('{{ team }}', team);
+                    fs.writeFileSync("./output/index.html", temporaryMainFile);
+                }
+                break;
 
-            } else if (chosenMember === "Intern") {
-                await inquirer.prompt(internQuestions);
-                console.log("about to call buildTeam function for intern");
-                buildTeam(chosenMember, team, templateMainFile);
-            } else {
+            case "Intern":
+                console.log("im inside switch(chosenMember) and case is intern");
+                const intern = await inquirer.prompt(internQuestions);
+                let intern1 = new Intern(intern.name, intern.id, intern.email, intern.school);
+                let intern1Card = renderHTML(intern1);
+                team = team + intern1Card;
+
+                let addMember2 = await inquirer.prompt(moreMembersQuestion);
+                chosenMember2 = addMember2.additionalMember;
+                console.log(chosenMember2, "chosenmember2 choice");
+
+                if (chosenMember2 === "Engineer") {
+                    await inquirer.prompt(engineerQuestions);
+                    buildTeam(chosenMember2, team, templateMainFile);
+                } else if (chosenMember2 === "Intern") {
+                    await inquirer.prompt(internQuestions);
+                    buildTeam(chosenMember2, team, templateMainFile);
+                } else {
+                    console.log("im in the else statement!");
+                    let temporaryMainFile = templateMainFile.replace('{{ team }}', team);
+                    fs.writeFileSync("./output/index.html", temporaryMainFile);
+                }
+                break;
+            case "No more members.":
                 let temporaryMainFile = templateMainFile.replace('{{ team }}', team);
                 fs.writeFileSync("./output/index.html", temporaryMainFile);
-            }
-            break;
-
-        case "Intern":
-            console.log("im inside switch(chosenMember) and case is intern");
-            const intern = await inquirer.prompt(internQuestions);
-            let intern1 = new Intern(intern.name, intern.id, intern.email, intern.school);
-            let intern1Card = renderHTML(intern1);
-            team = team + intern1Card;
-
-            let addMember2 = await inquirer.prompt(moreMembersQuestion);
-            chosenMember2 = addMember2.additionalMember;
-            console.log(addMember2.choice, "addMember2.choice");
-
-            if (chosenMember2 === "Engineer") {
-                let newMember2 = await inquirer.prompt(engineerQuestions);
-                chosenMember2 = newMember2.additionalMember;
-                buildTeam(chosenMember2, team, templateMainFile);
-            } else if (chosenMember2 === "Intern") {
-                let newMember2 = await inquirer.prompt(internQuestions);
-                chosenMember2 = newMember2.additionalMember;
-                buildTeam(chosenMember2, team, templateMainFile);
-            } else {
-                let temporaryMainFile = templateMainFile.replace('{{ team }}', team);
-                fs.writeFileSync("./output/index.html", temporaryMainFile);
-            }
-            break;
-        case "No more members.":
-            let temporaryMainFile = templateMainFile.replace('{{ team }}', team);
-            fs.writeFileSync("./output/index.html", temporaryMainFile);
+        }
+    } catch (err) {
+        console.log(err);
     }
 }
 
