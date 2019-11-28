@@ -99,8 +99,6 @@ inquirer
         buildTeam(user.member, team, templateMainFile);
     }).catch(err => console.log(err));
 
-
-
 async function buildTeam(chosenMember, team, templateMainFile) {
     try {
         switch (chosenMember) {
@@ -130,7 +128,6 @@ async function buildTeam(chosenMember, team, templateMainFile) {
 
                 let addMember2 = await inquirer.prompt(moreMembersQuestion);
                 chosenMember2 = addMember2.additionalMember;
-                console.log(chosenMember2, "chosenmember2 choice");
 
                 if (chosenMember2 === "Engineer") {
                     buildTeam(chosenMember2, team, templateMainFile);
@@ -149,8 +146,6 @@ async function buildTeam(chosenMember, team, templateMainFile) {
         console.log(err);
     }
 }
-
-
 
 function renderHTML(position) {
     const templateFile = fs.readFileSync(`./templates/${position.getRole().toLowerCase()}.html`, { encoding: 'utf8' });
