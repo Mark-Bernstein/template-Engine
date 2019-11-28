@@ -20,7 +20,8 @@ The build status is complete.
 ![screenshot](screenshot.jpg)
 
 **Code Example** 
-```inquirer
+```
+inquirer
     .prompt(initialQuestions)
     .then(function (user) {
         const templateMainFile = fs.readFileSync(`./templates/main.html`, { encoding: 'utf8' });
@@ -50,4 +51,4 @@ async function buildTeam(chosenMember, team, templateMainFile) {
                     fs.writeFileSync("./output/index.html", temporaryMainFile);
                 }
                 break;
-                ```
+```
