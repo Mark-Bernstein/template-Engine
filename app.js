@@ -116,10 +116,11 @@ async function buildTeam(chosenMember, team, templateMainFile) {
             let engineer1Card = renderHTML(engineer1);
             team = team + engineer1Card;
 
-            console.log("HERE I AM, line 118");
+            console.log("HERE I AM, line 119");
             let addMember = await inquirer.prompt(moreMembersQuestion);
+            console.log("line 121 executed");
             chosenMember = addMember.additionalMember;
-            console.log(addMember.choice, "addMember.choice");
+            console.log(chosenMember, "is the addMember.additionalMember");
 
 
             if (addMember.choice === "Engineer") {
